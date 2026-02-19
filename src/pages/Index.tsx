@@ -391,9 +391,33 @@ function SocialProof() {
   const inView = useInView(ref, { once: true, margin: "-60px" });
 
   const posts = [
-    { name: "Tomáš K.", sport: "🏃 Běh", text: "Dnes 10 km v parku! Kdo příště?", likes: 24, avatar: "T", time: "před 2h" },
-    { name: "Eliška M.", sport: "🧘 Jóga", text: "Ranní jóga v parku každou středu 7:00 — přidej se!", likes: 47, avatar: "E", time: "před 4h" },
-    { name: "Marek P.", sport: "🏀 Basketbal", text: "3v3 dnes v 18h u hřiště Slavia, chybí nám hráč!", likes: 12, avatar: "M", time: "před 1h" },
+    {
+      handle: "@TomasK",
+      avatar: "T",
+      text: `„Tak co, jdeš dneska na fotbal?" ⚽ 🔥\n„Jasně! Takový zápas si přece nemůžu nechat ujít!"\n\nNapětí ve vzduchu, stadion plný hlasů a očekávání před výkopem. Miluju ten moment, kdy rozhodčí pískne začátek a všechno ostatní přestane existovat. 🤜 ⚽`,
+      tags: ["#teamspirit", "#vášeň", "#goal", "#fanoušci", "#matchday", "#fotbal"],
+      date: "2/17/2026 · 11:38 AM",
+      likes: 1,
+      comments: 0,
+    },
+    {
+      handle: "@EliskaM",
+      avatar: "E",
+      text: `Ranní jóga v parku každou středu 7:00 🧘‍♀️✨\n\nKdo se přidá? Stačí podložka a chuť začít den jinak. Posíláme dobrou energii do celého města! 🌿`,
+      tags: ["#jóga", "#rannírutina", "#parkyoga", "#wellness", "#befitlife"],
+      date: "2/17/2026 · 7:15 AM",
+      likes: 47,
+      comments: 5,
+    },
+    {
+      handle: "@MarekP",
+      avatar: "M",
+      text: `3v3 basketbal dnes v 18h u hřiště Slavia 🏀\n\nChybí nám jeden hráč — kdo je volný? Úroveň: casual, nálada: soutěžní 😄 Přijď, zahraj, poznej lidi!`,
+      tags: ["#basketbal", "#streetball", "#3v3", "#sport", "#befitaktivity"],
+      date: "2/17/2026 · 1:00 PM",
+      likes: 12,
+      comments: 3,
+    },
   ];
 
   return (
@@ -413,29 +437,101 @@ function SocialProof() {
             <motion.div key={i}
               initial={{ opacity: 0, y: 30 }} animate={inView ? { opacity: 1, y: 0 } : {}}
               transition={{ delay: i * 0.12, duration: 0.5 }}
-              className="card-feature rounded-3xl p-6">
-              <div className="flex items-center gap-3 mb-4">
-                <div className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm text-white"
+              className="rounded-2xl p-6 flex flex-col gap-4"
+              style={{ background: "hsl(222, 20%, 10%)", border: "1px solid hsl(222, 15%, 18%)" }}>
+              {/* Header */}
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm text-white flex-shrink-0"
                   style={{ background: "var(--gradient-brand)" }}>
                   {p.avatar}
                 </div>
-                <div>
-                  <div className="font-semibold text-sm text-foreground">{p.name}</div>
-                  <div className="text-xs text-muted-foreground">{p.time}</div>
-                </div>
-                <span className="ml-auto text-xs px-2.5 py-1 rounded-full tag-brand">{p.sport}</span>
+                <span className="font-bold text-white text-sm">{p.handle}</span>
               </div>
-              <p className="text-sm text-foreground leading-relaxed mb-4">{p.text}</p>
-              <div className="flex items-center gap-4 text-xs text-muted-foreground border-t border-border pt-3">
-                <button className="flex items-center gap-1.5 hover:text-primary transition-colors">
-                  ❤️ <span>{p.likes}</span>
+
+              {/* Body */}
+              <p className="text-sm leading-relaxed whitespace-pre-line" style={{ color: "hsl(220, 10%, 80%)" }}>{p.text}</p>
+
+              {/* Tags */}
+              <div className="flex flex-wrap gap-1.5">
+                {p.tags.map(tag => (
+                  <span key={tag} className="text-xs font-medium" style={{ color: "hsl(var(--teal-mid))" }}>{tag}</span>
+                ))}
+              </div>
+
+              {/* Footer */}
+              <div style={{ color: "hsl(220, 10%, 50%)", fontSize: "0.7rem" }}>{p.date}</div>
+              <div className="flex items-center justify-between border-t pt-3" style={{ borderColor: "hsl(222, 15%, 18%)" }}>
+                <div className="flex items-center gap-4 text-xs" style={{ color: "hsl(220, 10%, 55%)" }}>
+                  <button className="flex items-center gap-1.5 hover:text-rose-400 transition-colors">
+                    🤍 <span>{p.likes}</span>
+                  </button>
+                  <button className="flex items-center gap-1.5 transition-colors" style={{ color: "hsl(220, 10%, 55%)" }}>
+                    Comments <span className="ml-1">{p.comments}</span>
+                  </button>
+                </div>
+                <button className="text-xs font-semibold px-3 py-1.5 rounded-lg text-white transition-colors"
+                  style={{ background: "hsl(var(--teal-mid))" }}>
+                  Add Comment
                 </button>
-                <button className="flex items-center gap-1.5 hover:text-primary transition-colors">
-                  💬 Komentář
-                </button>
-                <button className="flex items-center gap-1.5 hover:text-primary transition-colors ml-auto">
-                  ➕ Přidat se
-                </button>
+              </div>
+            </motion.div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ─── AUTHORS ─────────────────────────────────────────────────────────────────
+function Authors() {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-60px" });
+
+  const authors = [
+    {
+      name: "Ondřej Kout",
+      role: "Zakladatel & Programátor",
+      desc: "Stojí za technickou realizací BeFit. Navrhuje architekturu, píše kód a dává vizi konkrétní podobu.",
+      emoji: "💻",
+    },
+    {
+      name: "Vít Vohlídal",
+      role: "Design & Marketing",
+      desc: "Tvoří vizuální identitu BeFit. Stará se o to, aby aplikace nejen fungovala, ale aby byla i krásná a srozumitelná.",
+      emoji: "🎨",
+    },
+  ];
+
+  return (
+    <section ref={ref} className="py-28 px-6 bg-background">
+      <div className="max-w-4xl mx-auto">
+        <motion.div className="text-center mb-14"
+          initial={{ opacity: 0, y: 24 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.6 }}>
+          <span className="tag-brand px-4 py-1.5 rounded-full inline-block mb-4">Tým</span>
+          <h2 className="text-4xl font-extrabold text-foreground mb-3">
+            Lidé za <span className="gradient-text">BeFitem</span>
+          </h2>
+          <p className="text-muted-foreground text-lg max-w-md mx-auto">Dva studenti s jednou misí — spojovat lidi skrze pohyb.</p>
+        </motion.div>
+
+        <div className="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
+          {authors.map((a, i) => (
+            <motion.div key={i}
+              initial={{ opacity: 0, y: 30 }} animate={inView ? { opacity: 1, y: 0 } : {}}
+              transition={{ delay: i * 0.15, duration: 0.6 }}
+              className="card-feature rounded-3xl p-8 flex flex-col items-center text-center gap-5">
+              {/* Photo placeholder */}
+              <div className="w-28 h-28 rounded-full flex items-center justify-center text-4xl border-4 flex-shrink-0"
+                style={{ background: "hsl(var(--teal-mid) / 0.08)", borderColor: "hsl(var(--teal-mid) / 0.2)" }}>
+                {a.emoji}
+              </div>
+              <div>
+                <h3 className="text-xl font-extrabold text-foreground mb-1">{a.name}</h3>
+                <span className="text-xs font-bold tracking-wider uppercase px-3 py-1 rounded-full inline-block mb-3"
+                  style={{ background: "hsl(var(--teal-mid) / 0.1)", color: "hsl(var(--teal-mid))" }}>
+                  {a.role}
+                </span>
+                <p className="text-muted-foreground text-sm leading-relaxed">{a.desc}</p>
               </div>
             </motion.div>
           ))}
@@ -592,6 +688,7 @@ export default function Index() {
       <MapPreview />
       <Mission />
       <SocialProof />
+      <Authors />
       <Wishlist />
       <Footer />
     </main>
