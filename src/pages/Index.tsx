@@ -1,5 +1,5 @@
 import { motion, useInView } from "framer-motion";
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import befitLogo from "@/assets/befit-logo.png";
 import heroImg from "@/assets/hero-social.jpg";
 
@@ -539,11 +539,48 @@ function Wishlist() {
   const [email, setEmail] = useState("");
   const [name, setName] = useState("");
   const [submitted, setSubmitted] = useState(false);
-  const [count] = useState(247);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [count, setCount] = useState<number | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const fetchCount = async () => {
+    try {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { count: c } = await supabase
+        .from("wishlist")
+        .select("*", { count: "exact", head: true });
+      if (c !== null) setCount(c);
+    } catch {}
+  };
+
+  useEffect(() => { fetchCount(); }, []);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (email) setSubmitted(true);
+    if (!email) return;
+    setLoading(true);
+    setError("");
+    try {
+      const { supabase } = await import("@/integrations/supabase/client");
+      const { error: dbError } = await supabase
+        .from("wishlist")
+        .insert({ name: name.trim() || null, email: email.trim().toLowerCase() });
+
+      if (dbError) {
+        if (dbError.code === "23505") {
+          setError("Tento email je již na wishlistu! 🎉");
+        } else {
+          setError("Něco se pokazilo, zkus to znovu.");
+        }
+        setLoading(false);
+        return;
+      }
+      setSubmitted(true);
+      fetchCount();
+    } catch {
+      setError("Něco se pokazilo, zkus to znovu.");
+    }
+    setLoading(false);
   };
 
   return (
@@ -576,6 +613,13 @@ function Wishlist() {
           <p className="text-muted-foreground text-lg mb-4 max-w-md mx-auto leading-relaxed">
             BeFit se chystá změnit způsob, jakým mladí lidé sportují. Přidej se na wishlist a dostaneš jako první přístup.
           </p>
+
+          {count !== null && (
+            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6 text-sm font-semibold"
+              style={{ background: "hsl(var(--teal-mid) / 0.08)", color: "hsl(var(--teal-dark))" }}>
+              👥 Již {count} lidí čeká na BeFit
+            </div>
+          )}
 
           {submitted ? (
             <motion.div initial={{ scale: 0.85, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="py-6">
@@ -611,9 +655,13 @@ function Wishlist() {
               <motion.button
                 whileHover={{ scale: 1.02 }} whileTap={{ scale: 0.98 }}
                 type="submit"
-                className="btn-brand w-full py-4 rounded-2xl font-bold text-base mt-1">
-                Přidej mě na wishlist 🚀
+                disabled={loading}
+                className="btn-brand w-full py-4 rounded-2xl font-bold text-base mt-1 disabled:opacity-60">
+                {loading ? "Přidávám..." : "Přidej mě na wishlist 🚀"}
               </motion.button>
+              {error && (
+                <p className="text-sm text-center font-medium" style={{ color: "hsl(0 72% 51%)" }}>{error}</p>
+              )}
               <p className="text-muted-foreground text-xs text-center mt-1">
                 🔒 Žádný spam. Pouze oznámení o launchi BeFit.
               </p>
