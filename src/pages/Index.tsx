@@ -25,7 +25,7 @@ const features = [
   {
     emoji: "🏅",
     title: "Ocenění & výzvy",
-    desc: "Sbírej odznaky za splněné aktivity, streak dny a sociální interakce. Gamifikace, která motivuje.",
+    desc: "Sbírej odznaky za splněné aktivity a sociální interakce. Gamifikace, která motivuje.",
   },
   {
     emoji: "📸",
@@ -40,7 +40,7 @@ const features = [
   {
     emoji: "📊",
     title: "Progres & statistiky",
-    desc: "Sleduj svůj growth — vzdálenosti, aktivity, přátelé a splněné výzvy na jednom místě.",
+    desc: "Sleduj svůj growth — aktivity, přátelé a splněné výzvy na jednom místě.",
   },
 ];
 
@@ -74,6 +74,7 @@ function Navbar() {
       <div className="hidden md:flex gap-7 text-sm font-medium text-muted-foreground">
         <a href="#features" className="hover:text-primary transition-colors">Funkce</a>
         <a href="#mission" className="hover:text-primary transition-colors">Mise</a>
+        <a href="#authors" className="hover:text-primary transition-colors">Autoři</a>
         <a href="#wishlist" className="hover:text-primary transition-colors">Wishlist</a>
       </div>
 
@@ -118,12 +119,12 @@ function Hero() {
           <motion.img
             src={befitLogo}
             alt="BeFit"
-            className="w-24 h-24 rounded-3xl shadow-2xl animate-float"
+            className="w-24 h-24 mt-20 rounded-3xl shadow-2xl animate-float"
             style={{ boxShadow: "0 20px 60px hsl(175 48% 47% / 0.4)" }}
           />
         </motion.div>
 
-        <motion.div {...fadeUp(0.1)} className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-6 text-sm font-semibold"
+        <motion.div {...fadeUp(0.1)} className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-2 text-sm font-semibold"
           style={{ background: "hsl(175 48% 47% / 0.18)", border: "1px solid hsl(175 48% 47% / 0.35)", color: "hsl(175, 80%, 75%)" }}>
           <span className="w-2 h-2 rounded-full bg-teal-light animate-ping-slow inline-block" />
           Maturitní projekt 2025 · Brzy k dispozici
@@ -152,14 +153,6 @@ function Hero() {
           </a>
         </motion.div>
       </div>
-
-      {/* Scroll hint */}
-      <motion.div animate={{ y: [0, 7, 0] }} transition={{ repeat: Infinity, duration: 2 }}
-        className="absolute bottom-8 flex flex-col items-center gap-2 text-sm"
-        style={{ color: "hsl(175 30% 55%)" }}>
-        <span>Scroll</span>
-        <div className="w-px h-8" style={{ background: "linear-gradient(to bottom, hsl(175 30% 55%), transparent)" }} />
-      </motion.div>
     </section>
   );
 }
@@ -503,7 +496,7 @@ function Authors() {
   ];
 
   return (
-    <section ref={ref} className="py-28 px-6 bg-background">
+    <section id="authors" ref={ref} className="py-28 px-6 bg-background">
       <div className="max-w-4xl mx-auto">
         <motion.div className="text-center mb-14"
           initial={{ opacity: 0, y: 24 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.6 }}>
@@ -584,12 +577,6 @@ function Wishlist() {
             BeFit se chystá změnit způsob, jakým mladí lidé sportují. Přidej se na wishlist a dostaneš jako první přístup.
           </p>
 
-          {/* Counter */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full mb-8 text-sm font-semibold"
-            style={{ background: "hsl(var(--teal-mid) / 0.08)", color: "hsl(var(--teal-dark))" }}>
-            👥 Již {count} lidí čeká na BeFit
-          </div>
-
           {submitted ? (
             <motion.div initial={{ scale: 0.85, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} className="py-6">
               <div className="text-6xl mb-4">🎉</div>
@@ -634,22 +621,7 @@ function Wishlist() {
           )}
         </motion.div>
 
-        {/* Perks */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }} transition={{ delay: 0.3, duration: 0.6 }}
-          className="grid grid-cols-3 gap-4 mt-6 text-center">
-          {[
-            { icon: "⚡", text: "Early access" },
-            { icon: "🎁", text: "Speciální cena" },
-            { icon: "🏅", text: "Founding member odznak" },
-          ].map((p, i) => (
-            <div key={i} className="card-feature rounded-2xl p-4">
-              <div className="text-2xl mb-1">{p.icon}</div>
-              <div className="text-xs font-semibold text-muted-foreground">{p.text}</div>
-            </div>
-          ))}
-        </motion.div>
+      
       </div>
     </section>
   );
@@ -669,7 +641,6 @@ function Footer() {
           © {new Date().getFullYear()} BeFit. Sport spojuje lidi. ❤️
         </p>
         <div className="flex gap-6 text-sm text-muted-foreground">
-          <a href="#" className="hover:text-primary transition-colors">Kontakt</a>
           <a href="#wishlist" className="hover:text-primary transition-colors">Wishlist</a>
         </div>
       </div>
